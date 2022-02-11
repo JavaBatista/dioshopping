@@ -1,8 +1,9 @@
 import React from 'react';
 import { useSelector } from 'react-redux';
 import { Paper, Grid, Typography, List, makeStyles } from '@material-ui/core/';
-import Item from '../components/Item';
+// import Item from '../components/Item';
 import Card from '../components/Card';
+import { ItemV2 } from '../components/Item'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -55,7 +56,7 @@ const HomePage = () => {
                         {category.map(
                             category => {
                                 return (
-                                    <Item
+                                    <ItemV2
                                         key = {category.id} 
                                         name= {category.name}
                                         details={count[category.name]}
