@@ -4,7 +4,7 @@ import { FormGroup, FormControlLabel, Checkbox } from '@material-ui/core/';
 
 export const Item = ({ key, name, details }) => {
     return (
-        <ListItem button={true} onClick={() => console.log(`Categoria ${name} clicada`)} >
+        <ListItem button={true} >
             <ListItemText
                 primary={name}
                 secondary={details}
@@ -13,10 +13,14 @@ export const Item = ({ key, name, details }) => {
     )
 }
 
-export const ItemV2 = ({ key, name, details }) => {
+export const CheckboxItem = ({ key, name, handleChange }) => {
     return (
         <FormGroup>
-            <FormControlLabel control={<Checkbox />} label={name} />
+            <FormControlLabel 
+                control={<Checkbox  />} 
+                label={name} 
+                onChange={(event) => handleChange(name, event.target.checked)}
+            />
         </FormGroup>
     )
 }

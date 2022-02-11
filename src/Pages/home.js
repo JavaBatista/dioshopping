@@ -1,9 +1,10 @@
 import React from 'react';
+import { useState, useEffect } from 'react';
 import { useSelector } from 'react-redux';
 import { Paper, Grid, Typography, List, makeStyles } from '@material-ui/core/';
 // import Item from '../components/Item';
 import Card from '../components/Card';
-import { ItemV2 } from '../components/Item'
+import { CheckboxItem } from '../components/Item'
 
 const useStyles = makeStyles((theme) => ({
     root: {
@@ -17,33 +18,58 @@ const useStyles = makeStyles((theme) => ({
   }));
 
 const HomePage = () => {
-    const products = useSelector(state => state.products)
+
+    const [filter, setFilter] = useState(false);
+    const [filterName, setFilterName] = useState(false);
+    const [category, setCategory] = useState([]);
+    const [products, setProducts] = useState([]);
+
+    useEffect( () => {
+        
+        const categorys = productsList.map(
+            category => {
+                const container = { };
+                container['id'] = category.id_categorys;
+                container['name'] = category.name_categorys;
+                return container;
+            }
+        )
+    
+        let category = categorys.map(JSON.stringify)
+            .filter(function (item, index, arr) {
+                return arr.indexOf(item, index + 1) === -1;
+            })
+            .map(JSON.parse); 
+
+            if( !filter ) {
+                setCategory( category );
+
+                setProducts(productsList);
+            } else {
+                setCategory( category.filter( (item) => {
+                    return item.name === filterName
+                }) );
+
+                setProducts(productsList.filter( (item) => {
+                    return item.name_categorys === filterName
+                }));
+            }
+
+    }, [filter])
+
+    const handleCheckbox = (name, checkBoxState) => {
+        
+        setFilter( checkBoxState );
+        setFilterName( name );
+        console.log(`CheckBox ${name} modificada`)
+    }
+
+
+    const productsList = useSelector(state => state.products)
     const classes = useStyles();
 
-    const categorys = products.map(
-        category => {
-            const container = { };
-            container['id'] = category.id_categorys;
-            container['name'] = category.name_categorys;
-            return container;
-        }
-    )
-
-    const category = categorys.map(JSON.stringify)
-                    .filter(function(item, index, arr){
-                        return arr.indexOf(item, index + 1) === -1;
-                    })
-                    .map(JSON.parse)
-
-    const arrayCategory = categorys.map(category => category.name)
-    let count = { };
-
-    for(let i = 0; i < arrayCategory.length; i++){
-        {
-            let key = arrayCategory[i];
-            count[key] = (count[key] ? count[key] + 1 : 1)
-        }
-    }
+    
+    
 
     return(
         <Grid container spacing={3} className={classes.root}>
@@ -56,10 +82,10 @@ const HomePage = () => {
                         {category.map(
                             category => {
                                 return (
-                                    <ItemV2
+                                    <CheckboxItem
                                         key = {category.id} 
                                         name= {category.name}
-                                        details={count[category.name]}
+                                        handleChange= {handleCheckbox}
                                     />
                                 )
                             }
