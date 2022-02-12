@@ -26,17 +26,14 @@ const HomePage = () => {
     const [products, setProducts] = useState([]);
 
     var data = [];
-    // const productsList = useSelector(state => state.products)
     const classes = useStyles();
 
     useEffect( async () => {
 
-        // let data = [];
 
         try {
             const response = await fetch(url)
             data = await response.json();
-            // setProducts(data);
             console.log(data);
         }catch(e) {
             alert("O backend, api-dioshopping, precisa ser iniciado!");
