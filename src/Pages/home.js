@@ -19,14 +19,31 @@ const useStyles = makeStyles((theme) => ({
 
 const HomePage = () => {
 
+    const url = 'http://localhost:5000/product'
     const [filter, setFilter] = useState(false);
     const [filterName, setFilterName] = useState(false);
     const [category, setCategory] = useState([]);
     const [products, setProducts] = useState([]);
 
-    useEffect( () => {
+    var data = [];
+    // const productsList = useSelector(state => state.products)
+    const classes = useStyles();
+
+    useEffect( async () => {
+
+        // let data = [];
+
+        try {
+            const response = await fetch(url)
+            data = await response.json();
+            // setProducts(data);
+            console.log(data);
+        }catch(e) {
+            alert("O backend, api-dioshopping, precisa ser iniciado!");
+        }
+
         
-        const categorys = productsList.map(
+        const categorys = data.map(
             category => {
                 const container = { };
                 container['id'] = category.id_categorys;
@@ -44,13 +61,13 @@ const HomePage = () => {
             if( !filter ) {
                 setCategory( category );
 
-                setProducts(productsList);
+                setProducts(data);
             } else {
                 setCategory( category.filter( (item) => {
                     return item.name === filterName
                 }) );
 
-                setProducts(productsList.filter( (item) => {
+                setProducts(data.filter( (item) => {
                     return item.name_categorys === filterName
                 }));
             }
@@ -63,12 +80,6 @@ const HomePage = () => {
         setFilterName( name );
         console.log(`CheckBox ${name} modificada`)
     }
-
-
-    const productsList = useSelector(state => state.products)
-    const classes = useStyles();
-
-    
     
 
     return(

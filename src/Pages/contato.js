@@ -12,9 +12,14 @@ const Contatos = () => {
     const [success, setSuccess] = useState(false);
 
     useEffect(async () => {
-        const response = await fetch(url)
-        const data = await response.json();
-        setMessage(data);
+        try {
+            const response = await fetch(url)
+            const data = await response.json();
+            setMessage(data);
+        } catch(e) {
+            alert("O backend, api-dioshopping, precisa ser iniciado!");
+        }
+
     }, [render])
 
     const sendMessage = () => {
